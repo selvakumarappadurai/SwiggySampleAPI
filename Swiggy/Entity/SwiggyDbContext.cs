@@ -26,8 +26,8 @@ namespace Swiggy.Entity
 
             modelBuilder.Entity<Restaurant>(x =>
             {
-                x.ToTable("Restaurants").HasKey(x => x.Name);
-                //x.Property(x => x.Name).HasColumnName("Name");
+                x.ToTable("Restaurants").HasKey(x => x.Id);
+                x.HasIndex(y => y.Name).IsUnique();
                 x.HasMany(r => r.FoodItems).WithOne()
                 .Metadata.PrincipalToDependent
                 .SetPropertyAccessMode(PropertyAccessMode.Field);
@@ -44,8 +44,10 @@ namespace Swiggy.Entity
 
             modelBuilder.Entity<Customer>(x =>
             {
-                x.ToTable("Customers").HasKey(x => new { x.Name, x.Email });
+                x.ToTable("Customers")
+                .HasKey(x => x.Id);
             });
+            modelBuilder.Entity<Customer>().HasIndex(x => x.Email).IsUnique();
 
             modelBuilder.Entity<Order>(x =>
             {

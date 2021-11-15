@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Swiggy.Dtos.Customer;
 using Swiggy.Entity;
 using System.Linq;
@@ -34,7 +36,17 @@ namespace Swiggy.Controllers
         public IActionResult CreateCustomer(CustomerForCreateDto customerForCreateDto)
         {
             _swiggyDbContext.Customers.Add(new Customer(customerForCreateDto.Name, customerForCreateDto.Email));
-            _swiggyDbContext.SaveChanges();
+            try
+            {
+                _swiggyDbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException is SqlException sqlException)
+                {
+                   
+                }
+            }
             return Ok();
         }
     }

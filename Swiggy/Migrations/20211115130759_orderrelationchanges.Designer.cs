@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Swiggy.Entity;
 
 namespace Swiggy.Migrations
 {
     [DbContext(typeof(SwiggyDbContext))]
-    partial class SwiggyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211115130759_orderrelationchanges")]
+    partial class orderrelationchanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,15 +51,15 @@ namespace Swiggy.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("RestaurantId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("RestaurantName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RestaurantId");
+                    b.HasIndex("RestaurantName");
 
                     b.ToTable("FoodItems");
                 });
@@ -71,43 +73,32 @@ namespace Swiggy.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FoodItemId")
+                    b.Property<Guid?>("ItemId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("OrderedDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("RestaurantId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("RestaurantName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("FoodItemId");
+                    b.HasIndex("ItemId");
 
-                    b.HasIndex("RestaurantId");
+                    b.HasIndex("RestaurantName");
 
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Swiggy.Entity.Restaurant", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                    b.HasKey("Name");
 
                     b.ToTable("Restaurants");
                 });
@@ -116,7 +107,7 @@ namespace Swiggy.Migrations
                 {
                     b.HasOne("Swiggy.Entity.Restaurant", null)
                         .WithMany("FoodItems")
-                        .HasForeignKey("RestaurantId");
+                        .HasForeignKey("RestaurantName");
                 });
 
             modelBuilder.Entity("Swiggy.Entity.Order", b =>
@@ -129,15 +120,11 @@ namespace Swiggy.Migrations
 
                     b.HasOne("Swiggy.Entity.FoodItem", "Item")
                         .WithMany()
-                        .HasForeignKey("FoodItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("Swiggy.Entity.Restaurant", "Restaurant")
                         .WithMany()
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RestaurantName");
 
                     b.Navigation("Customer");
 

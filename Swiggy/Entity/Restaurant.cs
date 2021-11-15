@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Swiggy.Entity
 {
@@ -15,7 +16,7 @@ namespace Swiggy.Entity
             //Id = Guid.NewGuid();
             Name = name;
         }
-        //public Guid Id { get; private set; }
+        public Guid Id { get; private set; }
 
         public string Name { get; private set; }
 

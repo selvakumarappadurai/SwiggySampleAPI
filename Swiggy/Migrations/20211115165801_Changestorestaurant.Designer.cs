@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Swiggy.Entity;
 
 namespace Swiggy.Migrations
 {
     [DbContext(typeof(SwiggyDbContext))]
-    partial class SwiggyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211115165801_Changestorestaurant")]
+    partial class Changestorestaurant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,9 +76,6 @@ namespace Swiggy.Migrations
                     b.Property<Guid>("FoodItemId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("OrderedDate")
-                        .HasColumnType("datetimeoffset");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -101,13 +100,9 @@ namespace Swiggy.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.ToTable("Restaurants");
                 });
